@@ -2,7 +2,7 @@
 
 A FastMCP server for managing compute tasks on the [Qarnot Computing](https://qarnot.com) platform.
 
-The goal was to exploring the how mcp works and how it can quickly be integrated to claude web through connectors: https://claude.ai/settings/connectors with a starting point of an OpenAPI json (from https://doc.tasq.qarnot.com/documentation/api/)
+The goal was to explore how mcp works and how it can quickly be integrated to claude web through connectors: https://claude.ai/settings/connectors with a starting point of an OpenAPI json (from https://doc.tasq.qarnot.com/documentation/api/)
 
 The test has been made with cloudfare to expose my local container over network tunneling.
 
@@ -90,7 +90,7 @@ The tunnel URL will be displayed in the cloudflared container logs.
 
 ## Authentication
 
-> **Note:** This is a proof of concept — no OAuth flow is implemented. The Qarnot API key is passed directly via HTTP headers. In a production setup, consider:
+> **Note:** This is a proof of concept — no OAuth flow is implemented. The Qarnot API key is passed directly via env file. In a production setup, consider:
 > - Adding an **OAuth gateway** in front of this server that exchanges OAuth tokens for Qarnot API credentials, or
 > - Working with **Qarnot** to provide native OAuth support (e.g., OAuth 2.0 / OpenID Connect) so that MCP clients can authenticate without handling raw API keys.
 

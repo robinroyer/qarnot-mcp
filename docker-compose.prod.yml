@@ -8,6 +8,7 @@ services:
       target: production
     container_name: qarnot-mcp-server
     environment:
+      - QARNOT_API_KEY=${QARNOT_API_KEY}
       - QARNOT_BASE_URL=${QARNOT_BASE_URL:-https://api.qarnot.com}
       - QARNOT_API_VERSION=${QARNOT_API_VERSION:-1}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}

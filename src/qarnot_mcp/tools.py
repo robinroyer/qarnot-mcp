@@ -8,7 +8,7 @@ from fastmcp.exceptions import ToolError
 from pydantic import Field
 
 from .client import QarnotClient, QarnotAPIError
-from .config import LOG_LEVEL
+from .config import LOG_LEVEL, QARNOT_API_KEY
 
 # Configure logging
 logging.basicConfig(
@@ -26,11 +26,12 @@ def _mask_token(token: str) -> str:
 
 
 def get_api_key_from_context(ctx: Context) -> str:
-    """Extract API key from MCP request context.
+    """Extract API key from MCP request context or environment.
 
-    The API key can be provided via:
+    The API key is resolved in order:
     1. Authorization header as Bearer token
     2. X-Api-Key header directly
+    3. QARNOT_API_KEY environment variable
 
     Raises:
         ToolError: If no API key is found
@@ -52,7 +53,11 @@ def get_api_key_from_context(ctx: Context) -> str:
             logger.info(f"API key extracted from X-Api-Key header: {_mask_token(api_key)}")
             return api_key
 
-    raise ToolError("Authentication required. Please provide an API key via Authorization header.")
+    if QARNOT_API_KEY:
+        logger.info(f"API key loaded from QARNOT_API_KEY env var: {_mask_token(QARNOT_API_KEY)}")
+        return QARNOT_API_KEY
+
+    raise ToolError("Authentication required. Set QARNOT_API_KEY env var or provide an Authorization header.")
 
 
 async def get_client(ctx: Context) -> QarnotClient:

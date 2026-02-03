@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  qarnot-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: qarnot-mcp-server
+    environment:
+      - QARNOT_BASE_URL=${QARNOT_BASE_URL:-https://api.qarnot.com}
+      - QARNOT_API_VERSION=${QARNOT_API_VERSION:-1}
+      - LOG_LEVEL=${LOG_LEVEL:-DEBUG}
+    ports:
+      - "8000:8000"
+    networks:
+      - mcp-network
+
+  # Cloudflare tunnel for exposing local server to internet
+  # Useful for Claude Web access
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: qarnot-mcp-tunnel
+    command: tunnel --url http://qarnot-mcp:8000
+    depends_on:
+      - qarnot-mcp
+    networks:
+      - mcp-network
+
+networks:
+  mcp-network:
+    driver: bridge
